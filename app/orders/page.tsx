@@ -23,7 +23,7 @@ const PAY_COLORS: Record<string,{bg:string;text:string}> = {
   partial: {bg:"rgba(232,148,58,0.12)", text:"#854F0B"},
   paid:    {bg:"rgba(76,175,130,0.12)", text:"#0F6E56"},
 };
-const SITE_URL = "https://wrap-it-up-weld.vercel.app";
+const SITE_URL = "https://wrap-it-up-cj-intl.vercel.app";
 
 // ── PHONE CLEANER ── handles 0750..., +256750..., 256750...
 function cleanPhone(phone: string): string {
