@@ -25,6 +25,14 @@ const PAY_COLORS: Record<string,{bg:string;text:string}> = {
 };
 const SITE_URL = "https://wrap-it-up-weld.vercel.app";
 
+// ── PHONE CLEANER ── handles 0750..., +256750..., 256750...
+function cleanPhone(phone: string): string {
+  let p = (phone || "").replace(/\D/g, "");
+  if (p.startsWith("0")) p = "256" + p.slice(1);
+  if (!p.startsWith("256")) p = "256" + p;
+  return p;
+}
+
 export default function OrdersPage() {
   const router = useRouter();
   const [orders, setOrders]           = useState<any[]>([]);
@@ -63,7 +71,7 @@ export default function OrdersPage() {
         const msg = encodeURIComponent(
           `Hi ${order.customer_name?.split(" ")[0]}! 🎁\n\nYour gift has been delivered!\nWe hope they absolutely loved it. 🎀\n\nThank you for choosing Wrap It Up!\n\n— Wrap It Up, Kampala`
         );
-        window.open(`https://wa.me/${order.phone?.replace(/\D/g,"")}?text=${msg}`, "_blank");
+        window.open(`https://wa.me/${cleanPhone(order.phone)}?text=${msg}`, "_blank");
       }
     }
     load();
@@ -85,7 +93,7 @@ export default function OrdersPage() {
       `Track your order & pay here:\n${SITE_URL}/track\n\n` +
       `Enter your phone number on that page to see your order.\n\nQuestions? Just reply here! 😊`
     );
-    window.open(`https://wa.me/${order.phone?.replace(/\D/g,"")}?text=${msg}`, "_blank");
+    window.open(`https://wa.me/${cleanPhone(order.phone)}?text=${msg}`, "_blank");
     setConfirming(null);
     load();
   }
@@ -97,7 +105,7 @@ export default function OrdersPage() {
     const msg   = encodeURIComponent(
       `Hi ${name}! 🎀\nHere is your Wrap It Up tracking link:\n📋 Order: ${ref}\n💰 Total: UGX ${price.toLocaleString()}\n\nTrack & pay: ${SITE_URL}/track`
     );
-    window.open(`https://wa.me/${order.phone?.replace(/\D/g,"")}?text=${msg}`, "_blank");
+    window.open(`https://wa.me/${cleanPhone(order.phone)}?text=${msg}`, "_blank");
   }
 
   async function deleteOrder(id: string) {
@@ -162,7 +170,7 @@ export default function OrdersPage() {
                         {order.service} · {order.occasion} · {fmt(order.created_at)}
                       </div>
                       {order.phone && (
-                        <a href={`https://wa.me/${order.phone.replace(/\D/g,"")}`}
+                        <a href={`https://wa.me/${cleanPhone(order.phone)}`}
                           target="_blank" rel="noopener noreferrer" className="wa-link" style={{fontSize:"12px"}}>
                           📱 {order.phone}
                         </a>
@@ -224,12 +232,12 @@ export default function OrdersPage() {
 
                   {/* ACTIONS */}
                   <div style={{display:"flex",gap:"0.6rem",flexWrap:"wrap"}}>
-                    <a href={`https://wa.me/${order.phone?.replace(/\D/g,"")}`}
+                    <a href={`https://wa.me/${cleanPhone(order.phone || "")}`}
                       target="_blank" rel="noopener noreferrer"
                       className="btn btn-outline btn-sm" style={{color:"#25D366",borderColor:"rgba(37,211,102,0.4)"}}>
                       💬 WhatsApp
                     </a>
-                    <a href={`tel:${order.phone?.replace(/\D/g,"")}`} className="btn btn-outline btn-sm">📞 Call</a>
+                    <a href={`tel:${cleanPhone(order.phone || "")}`} className="btn btn-outline btn-sm">📞 Call</a>
                     {order.status !== "delivered" && (
                       <button className="btn btn-outline btn-sm" style={{color:"#0F6E56",borderColor:"rgba(76,175,130,0.4)"}}
                         onClick={() => updateStatus(order.id, "delivered")}>
