@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const USERS = [
-  { email: "adminwrapitup.ug",  password: "admin" },
-  { email: "jirehwrapitup.ug",    password: "jireh" },
+  { email: "admin@wrapitup.ug",  password: "admin" },
+  { email: "jireh@wrapitup.ug",    password: "jireh" },
 ];
 
 export default function LoginPage() {
